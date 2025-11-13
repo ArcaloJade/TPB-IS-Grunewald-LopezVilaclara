@@ -1,4 +1,4 @@
-package org.udesa.tpbisgrunewaldlopezvilaclara;
+package org.udesa.tpbisgrunewaldlopezvilaclara.model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +12,7 @@ public class GifCardFacade {
     public static final String InvalidToken = "InvalidToken";
 
     private Map<String, String> users;
-    private Map<String,GiftCard> cards;
+    private Map<String, GiftCard> cards;
     private List<String>  merchants;
     private Clock clock;
 

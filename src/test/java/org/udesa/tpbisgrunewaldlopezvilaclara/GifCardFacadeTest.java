@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.udesa.tpbisgrunewaldlopezvilaclara.model.Clock;
+import org.udesa.tpbisgrunewaldlopezvilaclara.model.GifCardFacade;
+import org.udesa.tpbisgrunewaldlopezvilaclara.model.GiftCard;
 
 public class GifCardFacadeTest {
     // Se espera que el usuario pueda inciar sesion con usuario y password y obtener un token

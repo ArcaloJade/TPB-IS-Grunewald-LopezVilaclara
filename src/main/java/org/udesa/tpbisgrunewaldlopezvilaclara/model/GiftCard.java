@@ -1,4 +1,4 @@
-package org.udesa.tpbisgrunewaldlopezvilaclara;
+package org.udesa.tpbisgrunewaldlopezvilaclara.model;
 
 import java.util.ArrayList;
 import java.util.List;
