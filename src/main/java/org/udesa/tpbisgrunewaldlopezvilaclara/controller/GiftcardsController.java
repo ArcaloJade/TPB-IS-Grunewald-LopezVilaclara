@@ -1,5 +1,6 @@
 package org.udesa.tpbisgrunewaldlopezvilaclara.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.Clock;
@@ -28,6 +29,13 @@ public class GiftcardsController {
 
         this.facade = new GifCardFacade(cards, users, merchants, clock);
     }
+
+    // capturo el error si crachea y devuelvo mensaje (Emilio lo tiene en TusLibros asi que lo pongo)
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleIllegalArgument(RuntimeException ex) {
+        return ResponseEntity.internalServerError().body(ex.getMessage());
+    }
+
 
     // GET de prueba para navegador (porque nos pide solo POST pero es para chequear que ande)
     // http://localhost:8080/api/giftcards/login?user=aUser&pass=aPassword
