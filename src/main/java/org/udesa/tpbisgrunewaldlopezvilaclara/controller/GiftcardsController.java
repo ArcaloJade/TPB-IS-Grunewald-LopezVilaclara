@@ -7,7 +7,6 @@ import org.udesa.tpbisgrunewaldlopezvilaclara.model.Clock;
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.GifCardFacade;
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.GiftCard;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @RestController
@@ -32,31 +31,31 @@ public class GiftcardsController {
 
     // capturo el error si crachea y devuelvo mensaje (Emilio lo tiene en TusLibros asi que lo pongo)
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleIllegalArgument(RuntimeException ex) {
-        return ResponseEntity.internalServerError().body(ex.getMessage());
+    public ResponseEntity<Map<String,Object>> handleRuntime(RuntimeException ex) {
+        String msg = ex.getMessage();
+        if ("InvalidUser".equals(msg) || "InvalidToken".equals(msg)) {
+            return ResponseEntity.status(401).body(Map.of("error", msg));
+        }
+        return ResponseEntity.status(500).body(Map.of("error", "InternalError", "detail", msg));
     }
 
-
-    // GET de prueba para navegador (porque nos pide solo POST pero es para chequear que ande)
-    // http://localhost:8080/api/giftcards/login?user=aUser&pass=aPassword
-    @GetMapping("/login")
-    public Map<String, Object> loginGet(
-            @RequestParam String user,
-            @RequestParam String pass
-    ) {
-        var token = facade.login(user, pass);
-        return Map.of("token", token.toString());
-    }
-
-    // --- Versión oficial del enunciado (POST) ---
     // curl -X POST "http://localhost:8080/api/giftcards/login?user=aUser&pass=aPassword"
-    @PostMapping("/login")
-    public Map<String, Object> loginPost(
+    @PostMapping(value = "/login", params = {"user", "pass"})
+    public ResponseEntity<UUID> login(
             @RequestParam String user,
             @RequestParam String pass
     ) {
-        var token = facade.login(user, pass);
-        return Map.of("token", token.toString());
+        return ResponseEntity.ok(facade.login(user, pass));
+    }
+
+    // GET para probar desde el navegador (SOLO DEBUG)
+    // http://localhost:8080/api/giftcards/login?user=aUser&pass=aPassword
+    @GetMapping(value = "/login", params = {"user", "pass"})
+    public ResponseEntity<UUID> loginGet(
+            @RequestParam String user,
+            @RequestParam String pass
+    ) {
+        return ResponseEntity.ok(facade.login(user, pass));
     }
 
 }
