@@ -48,6 +48,16 @@ public class GiftcardsController {
         return ResponseEntity.ok(facade.login(user, pass));
     }
 
+    @PostMapping(value = "/redeem", params = {"header", "cardId"})
+    public ResponseEntity<String> redeem(
+            @RequestHeader ("Authorization") String header,
+            @PathVariable String cardId
+    ) {
+        UUID token = UUID.fromString(header.replace("Bearer ", "").trim());
+        facade.redeem(token, cardId);
+        return ResponseEntity.ok("OK");
+    }
+
     // GET para probar desde el navegador (SOLO DEBUG)
     // http://localhost:8080/api/giftcards/login?user=aUser&pass=aPassword
     @GetMapping(value = "/login", params = {"user", "pass"})
