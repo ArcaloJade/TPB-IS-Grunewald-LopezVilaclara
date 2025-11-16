@@ -9,6 +9,7 @@ Emilio
 Enunciado
 Se nos pide implementar un servicio para que permita usar el facade de giftCards a través de una interfaz Api Rest con persistencia
 Se definen los siguientes endpoints o recursos.
+
 //    POST /api/giftcards/login?user=aUser&pass=aPassword
 //    Devuelve un token válido
 @PostMapping("/login") public ResponseEntity<Map<String, Object>> login( @RequestParam String user, @RequestParam String pass ) {
