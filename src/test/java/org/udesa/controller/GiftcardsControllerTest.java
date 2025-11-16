@@ -12,6 +12,7 @@ import org.udesa.tpbisgrunewaldlopezvilaclara.model.GifCardFacade;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,7 +42,6 @@ public class GiftcardsControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().is(200))
-//                .andExpect(content().string(fakeToken.toString()));
                 .andExpect(jsonPath("$").value(fakeToken.toString()));
     }
 
@@ -112,5 +112,61 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.error").value("InternalError"))
                 .andExpect(jsonPath("$.detail").value("Allahu Akbar"));
     }
+
+    // Tests de balance
+
+    @Test
+    public void test06BalanceSuccess() throws Exception {
+        UUID token = UUID.randomUUID();
+        String cardId = "C123";
+        int fakeBalance = 500;
+
+        when(facade.balance(token, cardId)).thenReturn(fakeBalance);
+
+        mockMvc.perform(
+                        get("/api/giftcards/" + cardId + "/balance")
+                                .header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.balance").value(fakeBalance));
+    }
+
+    @Test
+    public void test07BalanceFailsWithInvalidToken() throws Exception {
+        UUID token = UUID.randomUUID();
+        String cardId = "C123";
+
+        doThrow(new RuntimeException("InvalidToken"))
+                .when(facade).balance(token, cardId);
+
+        mockMvc.perform(
+                        get("/api/giftcards/" + cardId + "/balance")
+                                .header("Authorization", "Bearer " + token)
+                )
+                .andDo(print())
+                .andExpect(status().is(401))
+                .andExpect(jsonPath("$.error").value("InvalidToken"));
+    }
+
+    @Test
+    public void test08BalanceFailsWithInternalError() throws Exception {
+        UUID token = UUID.randomUUID();
+        String cardId = "C123";
+
+        doThrow(new RuntimeException("CardNotFound"))
+                .when(facade).balance(token, cardId);
+
+        mockMvc.perform(
+                        get("/api/giftcards/" + cardId + "/balance")
+                                .header("Authorization", "Bearer " + token)
+                )
+                .andDo(print())
+                .andExpect(status().is(500))
+                .andExpect(jsonPath("$.error").value("InternalError"))
+                .andExpect(jsonPath("$.detail").value("CardNotFound"));
+    }
+
 
 }

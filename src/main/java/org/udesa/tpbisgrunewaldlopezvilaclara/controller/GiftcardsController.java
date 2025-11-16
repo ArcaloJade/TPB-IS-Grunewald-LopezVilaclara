@@ -77,6 +77,23 @@ public class GiftcardsController {
         return ResponseEntity.ok("OK");
     }
 
+    //    GET /api/giftcards/{cardId}/balance
+    //    Consulta saldo de la tarjeta
+    //    @GetMapping("/{cardId}/balance") public ResponseEntity<Map<String, Object>> balance( @RequestHeader("Authorization") String header, @PathVariable String cardId ) {
+
+    @GetMapping("/{cardId}/balance")
+    public ResponseEntity<Map<String, Object>> balance(
+            @RequestHeader("Authorization") String header,
+            @PathVariable String cardId
+    ) {
+        UUID token = UUID.fromString(header.replace("Bearer ", "").trim());
+        return ResponseEntity.ok(Map.of("balance", facade.balance(token, cardId)));
+    }
+
+
+    // -------------------------------
+
+
     // GET para probar desde el navegador (SOLO DEBUG)
     // http://localhost:8080/api/giftcards/login?user=aUser&pass=aPassword
     @GetMapping(value = "/login", params = {"user", "pass"})
