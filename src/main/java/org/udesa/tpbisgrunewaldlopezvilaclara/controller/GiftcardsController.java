@@ -16,24 +16,6 @@ public class GiftcardsController {
 
     private final GifCardFacade facade;
 
-    // LOLO: Dejo esto comentado x las dudas, pero el constructor que dejé nos deja inyectar el facade
-    // real como hace Emilio, y tbn sigue la estructura q puse para los tests. fuera de eso no afecta otra
-    // funcionalidad ni nada de lo que ya hiciste
-
-//    public GiftcardsController() {
-//        List<GiftCard> cards = new ArrayList<>();
-//        Map<String, String> users = new HashMap<>();
-//        users.put("aUser", "aPassword");
-//
-//        List<String> merchants = new ArrayList<>();
-//        merchants.add("m1");
-//        merchants.add("m2");
-//
-//        Clock clock = new Clock();
-//
-//        this.facade = new GifCardFacade(cards, users, merchants, clock);
-//    }
-
     @Autowired
     public GiftcardsController(GifCardFacade facade) {
         this.facade = facade;
@@ -89,6 +71,21 @@ public class GiftcardsController {
         UUID token = UUID.fromString(header.replace("Bearer ", "").trim());
         return ResponseEntity.ok(Map.of("balance", facade.balance(token, cardId)));
     }
+
+
+    //    GET /api/giftcards/{cardId}/details
+    //    Lista los movimientos de la tarjeta
+    //    @GetMapping("/{cardId}/details") public ResponseEntity<Map<String, Object>> details( @RequestHeader("Authorization") String tokenHeader, @PathVariable String cardId ) {
+
+    @GetMapping("/{cardId}/details")
+    public ResponseEntity<Map<String, Object>> details(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String cardId
+    ) {
+        UUID token = UUID.fromString(tokenHeader.replace("Bearer ", "").trim());
+        return ResponseEntity.ok(Map.of("details", facade.details(token, cardId)));
+    }
+
 
 
     // -------------------------------

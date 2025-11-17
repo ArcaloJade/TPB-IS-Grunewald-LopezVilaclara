@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.GifCardFacade;
 
-import java.util.UUID;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -168,5 +168,62 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.detail").value("CardNotFound"));
     }
 
+    // Tests de details
+
+    @Test
+    public void test09DetailsSuccess() throws Exception {
+        UUID token = UUID.randomUUID();
+        String cardId = "C123";
+
+        List<String> fakeDetails = Arrays.asList("mov1", "mov2");
+
+        when(facade.details(token, cardId)).thenReturn(fakeDetails);
+
+        mockMvc.perform(
+                        get("/api/giftcards/" + cardId + "/details")
+                                .header("Authorization", "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.details").isArray())
+                .andExpect(jsonPath("$.details[0]").value("mov1"))
+                .andExpect(jsonPath("$.details[1]").value("mov2"));
+    }
+
+    @Test
+    public void test10DetailsFailsWithInvalidToken() throws Exception {
+        UUID token = UUID.randomUUID();
+        String cardId = "C123";
+
+        doThrow(new RuntimeException("InvalidToken"))
+                .when(facade).details(token, cardId);
+
+        mockMvc.perform(
+                        get("/api/giftcards/" + cardId + "/details")
+                                .header("Authorization", "Bearer " + token)
+                )
+                .andDo(print())
+                .andExpect(status().is(401))
+                .andExpect(jsonPath("$.error").value("InvalidToken"));
+    }
+
+    @Test
+    public void test11DetailsFailsWithInternalError() throws Exception {
+        UUID token = UUID.randomUUID();
+        String cardId = "C123";
+
+        doThrow(new RuntimeException("CardNotFound"))
+                .when(facade).details(token, cardId);
+
+        mockMvc.perform(
+                        get("/api/giftcards/" + cardId + "/details")
+                                .header("Authorization", "Bearer " + token)
+                )
+                .andDo(print())
+                .andExpect(status().is(500))
+                .andExpect(jsonPath("$.error").value("InternalError"))
+                .andExpect(jsonPath("$.detail").value("CardNotFound"));
+    }
 
 }
