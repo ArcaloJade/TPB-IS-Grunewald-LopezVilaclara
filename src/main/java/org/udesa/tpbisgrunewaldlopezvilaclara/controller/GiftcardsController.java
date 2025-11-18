@@ -25,7 +25,7 @@ public class GiftcardsController {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String,Object>> handleRuntime(RuntimeException ex) {
         String msg = ex.getMessage();
-        if ("InvalidUser".equals(msg) || "InvalidToken".equals(msg)) {
+        if ("InvalidUser".equals(msg) || "InvalidToken".equals(msg) || "InvalidMerchant".equals(msg)) {
             return ResponseEntity.status(401).body(Map.of("error", msg));
         }
         return ResponseEntity.status(500).body(Map.of("error", "InternalError", "detail", msg));
@@ -87,7 +87,22 @@ public class GiftcardsController {
     }
 
 
+    //    POST /api/giftcards/{cardId}/charge?merchant=MerchantCode&amount=anAmount&description=aDescriptio
+    //    Un merchant hace un cargo sobre la tarjeta
+    //    @PostMapping("/{cardId}/charge") public ResponseEntity<String> charge( @RequestParam String merchant, @RequestParam int amount, @RequestParam String description, @PathVariable String cardId ) {
 
-    // -------------------------------
-    
+    @PostMapping("/{cardId}/charge")
+    public ResponseEntity<String> charge(
+            @RequestParam String merchant,
+            @RequestParam int amount,
+            @RequestParam String description,
+            @PathVariable String cardId
+    ){
+        facade.charge(merchant, cardId, amount, description);
+        return ResponseEntity.ok("OK");
+    }
+
+
+
+
 }

@@ -226,4 +226,75 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.detail").value("CardNotFound"));
     }
 
+
+    // Tests de charge
+
+    @Test
+    public void test12ChargeSuccess() throws Exception {
+        String cardId = "C123";
+        String merchant = "M01";
+        int amount = 100;
+        String description = "Compra en tienda";
+
+        // No hace nada, simplemente verifica que se llame bien
+        doNothing().when(facade).charge(merchant, cardId, amount, description);
+
+        mockMvc.perform(
+                        post("/api/giftcards/" + cardId + "/charge")
+                                .param("merchant", merchant)
+                                .param("amount", String.valueOf(amount))
+                                .param("description", description)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andExpect(content().string("OK"));
+    }
+
+    @Test
+    public void test13ChargeFailsWithInvalidMerchant() throws Exception {
+        String cardId = "C123";
+        String merchant = "BAD_MERCHANT";
+        int amount = 100;
+        String description = "Compra en tienda";
+
+        doThrow(new RuntimeException("InvalidMerchant"))
+                .when(facade).charge(merchant, cardId, amount, description);
+
+        mockMvc.perform(
+                        post("/api/giftcards/" + cardId + "/charge")
+                                .param("merchant", merchant)
+                                .param("amount", String.valueOf(amount))
+                                .param("description", description)
+                )
+                .andDo(print())
+                .andExpect(status().is(401))
+                .andExpect(jsonPath("$.error").value("InvalidMerchant"));
+    }
+
+    @Test
+    public void test14ChargeFailsWithInternalError() throws Exception {
+        String cardId = "C123";
+        String merchant = "M01";
+        int amount = 100;
+        String description = "Compra en tienda";
+
+        doThrow(new RuntimeException("CardNotFound"))
+                .when(facade).charge(merchant, cardId, amount, description);
+
+        mockMvc.perform(
+                        post("/api/giftcards/" + cardId + "/charge")
+                                .param("merchant", merchant)
+                                .param("amount", String.valueOf(amount))
+                                .param("description", description)
+                )
+                .andDo(print())
+                .andExpect(status().is(500))
+                .andExpect(jsonPath("$.error").value("InternalError"))
+                .andExpect(jsonPath("$.detail").value("CardNotFound"));
+    }
+
+
+
+
 }
