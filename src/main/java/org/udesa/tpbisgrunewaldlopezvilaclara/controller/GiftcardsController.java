@@ -89,16 +89,5 @@ public class GiftcardsController {
 
 
     // -------------------------------
-
-
-    // GET para probar desde el navegador (SOLO DEBUG)
-    // http://localhost:8080/api/giftcards/login?user=aUser&pass=aPassword
-    @GetMapping(value = "/login", params = {"user", "pass"})
-    public ResponseEntity<UUID> loginGet(
-            @RequestParam String user,
-            @RequestParam String pass
-    ) {
-        return ResponseEntity.ok(facade.login(user, pass));
-    }
-
+    
 }
