@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class GifCardFacade {
     public static final String InvalidUser = "InvalidUser";
     public static final String InvalidMerchant = "InvalidMerchant";
