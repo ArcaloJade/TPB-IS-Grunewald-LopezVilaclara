@@ -42,7 +42,7 @@ public class GiftcardsControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$").value(fakeToken.toString()));
+                .andExpect(jsonPath("$.token").value(fakeToken.toString()));
     }
 
     @Test

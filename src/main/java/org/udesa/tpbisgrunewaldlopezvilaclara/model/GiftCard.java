@@ -1,19 +1,28 @@
 package org.udesa.tpbisgrunewaldlopezvilaclara.model;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiftCard {
+@Getter @Setter
+@Entity
+public class GiftCard extends ModelEntity {
     public static final String CargoImposible = "CargoImposible";
     public static final String InvalidCard = "InvalidCard";
-    private String id;
-    private int balance;
-    private String owner;
+    @Column(unique = true) private String cardId;
+    @Column private int balance;
+    @Column private String owner;
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> charges = new ArrayList<>();
 
-    public GiftCard( String id, int initialBalance ) {
-        this.id = id;
-        balance = initialBalance;
+    public GiftCard() {}
+
+    public GiftCard( String cardId, int initialBalance ) {
+        this.cardId = cardId;
+        this.balance = initialBalance;
     }
 
     public GiftCard charge( int anAmount, String description ) {
@@ -37,7 +46,7 @@ public class GiftCard {
     public boolean isOwnedBy( String aPossibleOwner ) { return owner.equals( aPossibleOwner );  }
 
     // accessors
-    public String id() {            return id;      }
+    public String id() {            return String.valueOf(id); }
     public int balance() {          return balance; }
     public List<String> charges() { return charges; }
 

@@ -37,12 +37,21 @@ public class GiftcardsController {
     //    Devuelve un token válido
     //    @PostMapping("/login") public ResponseEntity<Map<String, Object>> login( @RequestParam String user, @RequestParam String pass )
 
-    @PostMapping(value = "/login", params = {"user", "pass"})
-    public ResponseEntity<UUID> login(
+//    @PostMapping(value = "/login", params = {"user", "pass"})
+//    public ResponseEntity<UUID> login(
+//            @RequestParam String user,
+//            @RequestParam String pass
+//    ) {
+//        return ResponseEntity.ok(facade.login(user, pass));
+//    }
+
+    @PostMapping(value = "/login", params = {"user", "pass"}) // LOLO: Antes devolvia un UUID solo, no un Map
+    public ResponseEntity<Map<String, Object>> login(
             @RequestParam String user,
             @RequestParam String pass
     ) {
-        return ResponseEntity.ok(facade.login(user, pass));
+        UUID token = facade.login(user, pass);
+        return ResponseEntity.ok(Map.of("token", token.toString()));
     }
 
     //    POST /api/giftcards/{cardId}/redeem
