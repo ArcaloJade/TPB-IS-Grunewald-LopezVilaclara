@@ -37,14 +37,6 @@ public class GiftcardsController {
     //    Devuelve un token válido
     //    @PostMapping("/login") public ResponseEntity<Map<String, Object>> login( @RequestParam String user, @RequestParam String pass )
 
-//    @PostMapping(value = "/login", params = {"user", "pass"})
-//    public ResponseEntity<UUID> login(
-//            @RequestParam String user,
-//            @RequestParam String pass
-//    ) {
-//        return ResponseEntity.ok(facade.login(user, pass));
-//    }
-
     @PostMapping(value = "/login", params = {"user", "pass"}) // LOLO: Antes devolvia un UUID solo, no un Map
     public ResponseEntity<Map<String, Object>> login(
             @RequestParam String user,
@@ -58,7 +50,7 @@ public class GiftcardsController {
     //    Reclama una tarjeta (header Authorization: Bearer <token>)
     //    @PostMapping("/{cardId}/redeem") public ResponseEntity<String> redeemCard( @RequestHeader("Authorization") String header, @PathVariable String cardId )
 
-    @PostMapping(value = "/{cardId}/redeem") // LOLO: saqué param=... porque NO usa parámetros (?x=...)
+    @PostMapping(value = "/{cardId}/redeem")
     public ResponseEntity<String> redeem(
             @RequestHeader ("Authorization") String header,
             @PathVariable String cardId
