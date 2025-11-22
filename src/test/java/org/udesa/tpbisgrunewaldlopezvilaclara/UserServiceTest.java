@@ -36,7 +36,7 @@ class UserServiceTest extends ModelServiceTest<UserEntity, UserService> {
     }
 
     @Test
-    void test01FindByNameSuccess() {
+    void testFindByNameSuccess() {
         UserEntity model = savedSample();
 
         UserEntity found = service.findByName(model.getName());
@@ -47,7 +47,7 @@ class UserServiceTest extends ModelServiceTest<UserEntity, UserService> {
     }
 
     @Test
-    void test02FindByNameThrowsExceptionIfNotFound() {
+    void testFindByNameThrowsExceptionIfNotFound() {
         assertThrows(RuntimeException.class,
                 () -> service.findByName("usuario_que_no_existe"));
     }

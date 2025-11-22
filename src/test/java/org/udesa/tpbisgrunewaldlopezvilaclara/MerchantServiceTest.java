@@ -32,7 +32,7 @@ class MerchantServiceTest extends ModelServiceTest<Merchant, MerchantService> {
     }
 
     @Test
-    void test01FindByCodeSuccess() {
+    void testFindByCodeSuccess() {
         Merchant model = savedSample();
 
         Merchant found = service.findByCode(model.getCode());
@@ -43,7 +43,7 @@ class MerchantServiceTest extends ModelServiceTest<Merchant, MerchantService> {
     }
 
     @Test
-    void test02FindByCodeFailure() {
+    void testFindByCodeFailure() {
         assertThrows(RuntimeException.class,
                 () -> service.findByCode("NO_EXISTE_" + System.nanoTime()));
     }

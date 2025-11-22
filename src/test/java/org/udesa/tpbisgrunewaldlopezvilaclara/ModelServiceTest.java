@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Estos tests se corren al ejecutar los tests de herederos (MerchantServiceTest, UserServiceTest)
 public abstract class ModelServiceTest<
         M extends ModelEntity,
         S extends ModelService<M, ? extends JpaRepository<M, Long>>> {
@@ -34,7 +35,7 @@ public abstract class ModelServiceTest<
     }
 
     @Test
-    public void test01EntitySave() {
+    public void testEntitySave() {
         M newModel = newSample();
         M retrieved = service.save(newModel);
 
@@ -44,7 +45,7 @@ public abstract class ModelServiceTest<
     }
 
     @Test
-    public void test02EntityUpdate() {
+    public void testEntityUpdate() {
         updateUser(model);
         service.save(model);
 
@@ -53,19 +54,19 @@ public abstract class ModelServiceTest<
     }
 
     @Test
-    public void test03DeletionByObject() {
+    public void testDeletionByObject() {
         service.delete(model);
         assertThrows(RuntimeException.class, () -> service.getById(model.getId()));
     }
 
     @Test
-    public void test04DeletionById() {
+    public void testDeletionById() {
         service.delete(model.getId());
         assertThrows(RuntimeException.class, () -> service.getById(model.getId()));
     }
 
     @Test
-    public void test05DeletionByProxy() throws Exception {
+    public void testDeletionByProxy() throws Exception {
         M proxy = service.getModelClass().getConstructor().newInstance();
         proxy.setId(model.getId());
 
@@ -74,7 +75,7 @@ public abstract class ModelServiceTest<
     }
 
     @Test
-    public void test06FindAll() {
+    public void testFindAll() {
         List<M> list = service.findAll();
         assertFalse(list.isEmpty());
         assertTrue(list.contains(model));
