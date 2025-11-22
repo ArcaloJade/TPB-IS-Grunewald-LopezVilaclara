@@ -4,17 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.Clock;
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.GifCardFacade;
@@ -39,7 +36,10 @@ public class GifCardFacadeTest {
     @Autowired private GiftCardRepository giftCardRepository;
     @Autowired private MerchantService merchantService;
     @Autowired private MerchantRepository merchantRepository;
-    @Autowired private Clock clock;
+
+//    @Autowired private Clock clock;
+//    @MockBean private Clock clock;
+    @SpyBean private Clock clock; // SpyBean me deja cambiar algunas llamadas a now() sin romper las demás
 
     // Se espera que el usuario pueda inciar sesion con usuario y password y obtener un token
     //    debe poder usar el token para gestionar la tarjeta.
@@ -169,25 +169,16 @@ public class GifCardFacadeTest {
         assertThrows( RuntimeException.class, () -> facade.details( token, "GC1" ) );
     }
 
-//    @Test public void tokenExpires() {
-//        GifCardFacade facade = newFacade( new Clock( ){
-//            Iterator<LocalDateTime> it = List.of( LocalDateTime.now(), LocalDateTime.now().plusMinutes( 16 ) ).iterator();
-//            public LocalDateTime now() {
-//                return it.next();
-//            }
-//        } );
-//
-//        UUID token = facade.login( "Kevin", "KevPass" );
-//
-//        assertThrows( RuntimeException.class, () -> facade.redeem( token, "GC1" ) );
-//    }
+    @Test public void tokenExpires() {
+        LocalDateTime t0 = LocalDateTime.now();
+        LocalDateTime t1 = t0.plusMinutes(16);
 
-//    private static GifCardFacade newFacade() {return newFacade( new Clock() );    }
-//    private static GifCardFacade newFacade( Clock  clock ) {
-//        return new GifCardFacade( new ArrayList( List.of( new GiftCard( "GC1", 10 ), new GiftCard( "GC2", 5 ) ) ),
-//                                  new HashMap( Map.of( "Bob", "BobPass", "Kevin", "KevPass" ) ),
-//                                  new ArrayList<>( List.of( "M1" ) ),
-//                                  clock );
-//    }
+        // el doReturn es para SpyBean
+        doReturn(t0, t1).when(clock).now();
+
+        UUID token = facade.login("Kevin", "KevPass");
+
+        assertThrows(RuntimeException.class, () -> facade.redeem(token, "GC1"));
+    }
 
 }
