@@ -41,12 +41,9 @@ public class GiftCard extends ModelEntity {
         return this;
     }
 
-    // proyectors
     public boolean owned() {                            return owner != null;                   }
     public boolean isOwnedBy( String aPossibleOwner ) { return owner.equals( aPossibleOwner );  }
 
-    // accessors
-    public String id() {            return String.valueOf(id); }
     public int balance() {          return balance; }
     public List<String> charges() { return charges; }
 
