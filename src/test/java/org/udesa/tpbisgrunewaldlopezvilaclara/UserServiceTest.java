@@ -17,14 +17,13 @@ class UserServiceTest extends ModelServiceTest<UserEntity, UserService> {
 
     @BeforeEach
     void init() {
-        // le digo al test genérico qué service concreto usar
         this.service = userService;
     }
 
     @Override
     protected UserEntity newSample() {
         UserEntity u = new UserEntity();
-        u.setName("TestUser_" + System.nanoTime()); // solución al UNIQUE porque explotaba H2
+        u.setName("TestUser_" + System.nanoTime());
         u.setPassword("pass123");
         return u;
     }

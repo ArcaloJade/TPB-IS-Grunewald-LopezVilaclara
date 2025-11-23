@@ -11,7 +11,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Estos tests se corren al ejecutar los tests de herederos (MerchantServiceTest, UserServiceTest)
 public abstract class ModelServiceTest<
         M extends ModelEntity,
         S extends ModelService<M, ? extends JpaRepository<M, Long>>> {
@@ -21,7 +20,7 @@ public abstract class ModelServiceTest<
 
     protected M model;
 
-    protected abstract M newSample(); // entidad de ejemplo
+    protected abstract M newSample();
 
     protected abstract M updateUser(M entity);
 

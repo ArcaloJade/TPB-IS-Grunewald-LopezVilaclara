@@ -22,7 +22,7 @@ class MerchantServiceTest extends ModelServiceTest<Merchant, MerchantService> {
 
     @Override
     protected Merchant newSample() {
-        return new Merchant("MERC_" + System.nanoTime());  // código único
+        return new Merchant("MERC_" + System.nanoTime());
     }
 
     @Override

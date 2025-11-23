@@ -37,20 +37,7 @@ public class GifCardFacadeTest {
     @Autowired private MerchantService merchantService;
     @Autowired private MerchantRepository merchantRepository;
 
-//    @Autowired private Clock clock;
-//    @MockBean private Clock clock;
-    @SpyBean private Clock clock; // SpyBean me deja cambiar algunas llamadas a now() sin romper las demás
-
-    // Se espera que el usuario pueda inciar sesion con usuario y password y obtener un token
-    //    debe poder usar el token para gestionar la tarjeta.
-    //    el token se vence a los 5'
-
-    // las giftcards ya estan definidas en el sistema.
-    //    el usuario las reclama, pueden ser varias
-    //    puede consultar el saldo y el detalle de gastos de sus tarjetas
-
-    // los merchants pueden hacer cargos en las tarjetas que hayan sido reclamadas.
-    //    los cargos se actualizan en el balance de las tarjetas
+    @SpyBean private Clock clock;
 
     @BeforeEach
     public void setUp() {
@@ -173,7 +160,6 @@ public class GifCardFacadeTest {
         LocalDateTime t0 = LocalDateTime.now();
         LocalDateTime t1 = t0.plusMinutes(16);
 
-        // el doReturn es para SpyBean
         doReturn(t0, t1).when(clock).now();
 
         UUID token = facade.login("Kevin", "KevPass");

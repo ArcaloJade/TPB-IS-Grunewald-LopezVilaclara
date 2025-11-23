@@ -282,6 +282,6 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.error").value("InternalError"))
                 .andExpect(jsonPath("$.detail").value("CardNotFound"));
     }
-    
+
 
 }
