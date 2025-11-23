@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GiftcardsControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired GiftcardsController controller;
 
     private String cardId = "C123";
     private String USER_1 = "aUser";
@@ -113,7 +112,7 @@ public class GiftcardsControllerTest {
     public void test05RedeemFailsWithInternalError() throws Exception {
         UUID token = UUID.randomUUID();
 
-        doThrow(new RuntimeException("Allahu Akbar"))
+        doThrow(new RuntimeException("Boom!"))
                 .when(facade).redeem(token, cardId);
 
         mockMvc.perform(
@@ -123,7 +122,7 @@ public class GiftcardsControllerTest {
                 .andDo(print())
                 .andExpect(status().is(500))
                 .andExpect(jsonPath("$.error").value(INTERNAL_ERROR))
-                .andExpect(jsonPath("$.detail").value("Allahu Akbar"));
+                .andExpect(jsonPath("$.detail").value("Boom!"));
     }
 
     @Test

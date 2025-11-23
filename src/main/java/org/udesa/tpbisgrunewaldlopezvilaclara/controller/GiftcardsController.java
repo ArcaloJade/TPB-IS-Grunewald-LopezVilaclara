@@ -3,11 +3,7 @@ package org.udesa.tpbisgrunewaldlopezvilaclara.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import org.udesa.tpbisgrunewaldlopezvilaclara.model.Clock;
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.GifCardFacade;
-import org.udesa.tpbisgrunewaldlopezvilaclara.model.GiftCard;
-
 import java.util.*;
 
 @RestController
@@ -30,7 +26,7 @@ public class GiftcardsController {
         return ResponseEntity.status(500).body(Map.of("error", "InternalError", "detail", msg));
     }
 
-    @PostMapping(value = "/login", params = {"user", "pass"}) // LOLO: Antes devolvia un UUID solo, no un Map
+    @PostMapping(value = "/login", params = {"user", "pass"})
     public ResponseEntity<Map<String, Object>> login(
             @RequestParam String user,
             @RequestParam String pass
@@ -44,7 +40,7 @@ public class GiftcardsController {
             @RequestHeader ("Authorization") String header,
             @PathVariable String cardId
     ) {
-        UUID token = UUID.fromString(header.replace("Bearer ", "").trim());
+        UUID token = getUuid(header);
         facade.redeem(token, cardId);
         return ResponseEntity.ok("OK");
     }
@@ -54,7 +50,7 @@ public class GiftcardsController {
             @RequestHeader("Authorization") String header,
             @PathVariable String cardId
     ) {
-        UUID token = UUID.fromString(header.replace("Bearer ", "").trim());
+        UUID token = getUuid(header);
         return ResponseEntity.ok(Map.of("balance", facade.balance(token, cardId)));
     }
 
@@ -63,7 +59,7 @@ public class GiftcardsController {
             @RequestHeader("Authorization") String tokenHeader,
             @PathVariable String cardId
     ) {
-        UUID token = UUID.fromString(tokenHeader.replace("Bearer ", "").trim());
+        UUID token = getUuid(tokenHeader);
         return ResponseEntity.ok(Map.of("details", facade.details(token, cardId)));
     }
 
@@ -78,4 +74,9 @@ public class GiftcardsController {
         return ResponseEntity.ok("OK");
     }
 
+
+    private static UUID getUuid(String header) {
+        UUID token = UUID.fromString(header.replace("Bearer ", "").trim());
+        return token;
+    }
 }

@@ -6,13 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class GiftCardService extends ModelService<GiftCard, GiftCardRepository> {
 
-    protected void updateData( GiftCard existingObject, GiftCard updatedObject) {
-        existingObject.setCardId( updatedObject.getCardId() );
-        existingObject.setBalance( updatedObject.getBalance() );
-        existingObject.setOwner( updatedObject.getOwner() );
-        existingObject.setCharges( updatedObject.getCharges() );
-    }
-
     @Transactional(readOnly = true)
     public GiftCard findByCardId( String cardId ) {
         return repository.findByCardId( cardId )
