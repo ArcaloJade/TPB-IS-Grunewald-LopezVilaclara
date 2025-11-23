@@ -26,8 +26,6 @@ public class GiftcardsControllerTest {
 
     @MockBean GifCardFacade facade;
 
-    // Tests de login
-
     @Test
     public void test01LoginSuccessReturnsToken() throws Exception {
         UUID fakeToken = UUID.randomUUID();
@@ -59,8 +57,6 @@ public class GiftcardsControllerTest {
                 .andExpect(status().is(401))
                 .andExpect(jsonPath("$.error").value("InvalidUser"));
     }
-
-    // Tests de redeem
 
     @Test
     public void test03RedeemSuccess() throws Exception {
@@ -112,8 +108,6 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.error").value("InternalError"))
                 .andExpect(jsonPath("$.detail").value("Allahu Akbar"));
     }
-
-    // Tests de balance
 
     @Test
     public void test06BalanceSuccess() throws Exception {
@@ -167,8 +161,6 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.error").value("InternalError"))
                 .andExpect(jsonPath("$.detail").value("CardNotFound"));
     }
-
-    // Tests de details
 
     @Test
     public void test09DetailsSuccess() throws Exception {
@@ -225,9 +217,6 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.error").value("InternalError"))
                 .andExpect(jsonPath("$.detail").value("CardNotFound"));
     }
-
-
-    // Tests de charge
 
     @Test
     public void test12ChargeSuccess() throws Exception {
@@ -293,8 +282,6 @@ public class GiftcardsControllerTest {
                 .andExpect(jsonPath("$.error").value("InternalError"))
                 .andExpect(jsonPath("$.detail").value("CardNotFound"));
     }
-
-
-
+    
 
 }
