@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.udesa.tpbisgrunewaldlopezvilaclara.model.GiftCard;
 
 public class GiftCardTest {
+    private String description = "Un cargo";
 
     @Test public void aSimpleCard() {
         assertEquals( 10, newCard().balance() );
@@ -19,7 +20,7 @@ public class GiftCardTest {
 
     @Test public void cannotChargeUnownedCards() {
         GiftCard aCard = newCard();
-        assertThrows( RuntimeException.class, () -> aCard.charge( 2, "Un cargo" ) );
+        assertThrows( RuntimeException.class, () -> aCard.charge( 2, description ) );
         assertEquals( 10, aCard.balance() );
         assertTrue( aCard.charges().isEmpty() );
     }
@@ -27,14 +28,14 @@ public class GiftCardTest {
     @Test public void chargeACard() {
         GiftCard aCard = newCard();
         aCard.redeem( "Bob" );
-        aCard.charge( 2, "Un cargo" );
+        aCard.charge( 2, description);
         assertEquals( 8, aCard.balance() );
-        assertEquals( "Un cargo", aCard.charges().getLast() );
+        assertEquals( description, aCard.charges().getLast() );
     }
 
     @Test public void cannotOverrunACard() {
         GiftCard aCard = newCard();
-        assertThrows( RuntimeException.class, () -> aCard.charge( 11, "Un cargo" ) );
+        assertThrows( RuntimeException.class, () -> aCard.charge( 11, description ) );
         assertEquals( 10, aCard.balance() );
     }
 
